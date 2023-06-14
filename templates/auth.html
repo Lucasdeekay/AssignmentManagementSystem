@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block nav %}
+<!-- NAVIGATION -->
+<nav class="navigation">
+    <!-- MENU -->
+    <ul class="menu">
+        {% block auth_list %}
+        {% endblock auth_list %}
+    </ul>
+    <!-- END / MENU -->
+
+</nav>
+<!-- END / NAVIGATION -->
+{% endblock nav %}
+
+{% block content %}
+
+<!-- LOGIN -->
+<section id="login-content" class="login-content">
+    <div class="awe-parallax bg-login-content"></div>
+    <div class="awe-overlay"></div>
+    <div class="container">
+        <div class="row">
+
+            {% block form %}
+            {% endblock form %}
+
+            <div class="image">
+                <img src="images/homeslider/img-thumb.png" alt="">
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- END / LOGIN -->
+
+{% endblock content %}

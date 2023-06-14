@@ -1,0 +1,91 @@
+{% extends 'account-nav.html' %}
+
+{% load static %}
+
+{% block title %}
+Assignment Submission
+{% endblock title %}
+
+{% block body %}
+
+<section id="quizz-intro-section" class="quizz-intro-section learn-section">
+        <div class="container">
+
+            <div class="title-ct">
+                <h3><strong>Title</strong>
+                {% if submission %}
+                    {{ submission.assignment.title }}
+                {% else %}
+                    {{ assignment.title }}
+                {% endif %}
+                </h3>
+            </div>
+
+            <div class="question-content-wrap">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="question-content">
+                            {% if submission %}
+                            <h4 class="sm bold">Answer</h4>
+                            <p>{{ submission.text }}</p>
+
+                            <h4 class="sm bold">Feedback</h4>
+                            <ul class="list-disc">
+                                <li>{{ submission.grading.feedback }}</li>
+                            </ul>
+
+                            {% else %}
+                            <h4 class="sm bold">Warning</h4>
+                            <p>Assignment must be submitted before {{ assignment.deadline }}</p>
+
+                            <div class="download-file-learn">
+                                <a href="{% url 'Assignment:submit_assignment' ass_id %}" class="mc-btn btn-style-1">
+                                    <i class="icon md-download-1"></i>
+                                    Submit Assignment
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <aside class="question-sidebar">
+                            <div class="download-file-learn">
+                                {% if submission %}
+                                <a href="{{ submission.assignment.file.url }}" class="mc-btn btn-style-1" download>
+                                    <i class="icon md-download-1"></i>
+                                    Assignment File
+                                </a>
+                                {% else %}
+                                <a href="{{ assignment.file.url }}" class="mc-btn btn-style-1" download>
+                                    <i class="icon md-download-1"></i>
+                                    Assignment File
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="score-sb">
+                                <h4 class="title-sb">Total score<span>
+                                    {% if submission %}
+                                    {{ submission.grading.score }}
+                                    {% else %}
+                                    0
+                                    {% endif %}
+                                </span></h4>
+                            </div>
+
+                            {% if submission.grading.score <= 0 %}
+                            <div class="download-file-learn">
+                                <a href="{% url 'Assignment:mark_assignment' submission.id %}" class="mc-btn btn-style-1">
+                                    Mark Assignment
+                                </a>
+                            </div>
+                            {% endif %}
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock body %}

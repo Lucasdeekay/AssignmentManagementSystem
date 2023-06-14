@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block nav %}
+<!-- NAVIGATION -->
+<nav class="navigation">
+
+    <!-- MENU -->
+    <ul class="menu">
+        <li class="current-menu-item"><a href="{% url 'Assignment:logout' %}">Logout</a></li>
+        <li class="menu-item-has-children megamenu col-4">
+            <a href="">Course</a>
+            <ul class="sub-menu">
+
+                <li class="menu-item-has-children">
+                    <a href="{% url 'Assignment:assignment' %}">Assignments</a>
+                    <ul class="sub-menu">
+                        <li><a href="{% url 'Assignment:assignment_list' %}">Assignment List</a></li>
+                        <li><a href="{% url 'Assignment:assignment_submit' %}">Submit Assignment</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children">
+                    <a href="">Courses</a>
+                    <ul class="sub-menu">
+                        <li><a href="course-learn.html">+ Add course</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!-- END / MENU -->
+
+    <!-- SEARCH BOX -->
+    <div class="search-box">
+        <i class="icon md-search"></i>
+        <div class="search-inner">
+            <form>
+                <input type="text" placeholder="key words">
+            </form>
+        </div>
+    </div>
+    <!-- END / SEARCH BOX -->
+
+    <!-- LIST ACCOUNT INFO -->
+    <ul class="list-account-info">
+
+        <!-- MESSAGE INFO -->
+        <li class="list-item messages">
+            <div class="message-info item-click">
+                <i class="icon md-email"></i>
+                <span class="itemnew"></span>
+            </div>
+        </li>
+        <!-- END / MESSAGE INFO -->
+
+
+        <li class="list-item account">
+            <div class="account-info item-click">
+                <img src="images/team-13.jpg" alt="">
+            </div>
+            <div class="toggle-account toggle-list">
+                <ul class="list-account">
+                    <li><a href="setting.html"><i class="icon md-config"></i>Setting</a></li>
+                    <li><a href="login.html"><i class="icon md-arrow-right"></i>Sign Out</a></li>
+                </ul>
+            </div>
+        </li>
+
+
+    </ul>
+    <!-- END / LIST ACCOUNT INFO -->
+
+</nav>
+<!-- END / NAVIGATION -->
+{% endblock nav %}
+
+{% block content %}
+
+    <!-- PROFILE FEATURE -->
+    <section class="profile-feature">
+        <div class="awe-parallax bg-profile-feature"></div>
+        <div class="awe-overlay overlay-color-3"></div>
+        <div class="container">
+            <div class="info-author">
+                <div class="image">
+                    <img src="Fresh/IMG-20220102-WA0018.jpg" alt="" width="70px">
+                </div>
+                <div class="name-author">
+                    <h2 class="big">{{ person.last_name }} {{ person.first_name }}</h2>
+                </div>
+                <div class="address-author">
+                    <i class="fa fa-map-marker"></i>
+                    <h3>DOMINION UNIVERSITY</h3>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- END / PROFILE FEATURE -->
+
+     <!-- CONTENT BAR -->
+    <section class="content-bar">
+        <div class="container">
+            <ul>
+                <li>
+                    <a href="{% url 'Assignment:assignment' %}">
+                        <i class="icon md-shopping"></i>
+                        Assignment
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'Assignment:profile' %}">
+                        <i class="icon md-user-minus"></i>
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'Assignment:inbox' %}">
+                        <i class="icon md-email"></i>
+                        Inbox
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </section>
+   <!-- END / CONTENT BAR -->
+
+    {% block body %}
+    {% endblock body %}
+
+{% endblock content %}
