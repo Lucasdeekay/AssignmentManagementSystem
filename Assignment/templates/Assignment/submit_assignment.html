@@ -1,0 +1,59 @@
+{% extends 'account-nav.html' %}
+
+{% load static %}
+
+{% block title %}
+Mark Assignment
+{% endblock title %}
+
+{% block body %}
+
+<section id="quizz-intro-section" class="quizz-intro-section learn-section">
+    <div class="container">
+
+        <div class="title-ct">
+            <h3><strong>Title</strong>{{ submission.assignment.title }}</h3>
+        </div>
+
+        <div class="question-content-wrap">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="question-content" style="min-height:0px">
+                        <div class="attachments">
+                            <a href="{{ submission.assignment.file.url }}" download><i class="icon md-paperclip"></i>Download Assignment</a>
+                        </div>
+                        <div class="mc-title">
+                            <h3 class="md">{{ submission.assignment.title }}</h3>
+                            <div class="meta">
+                                Given on {{ submission.assignment.date_given }}
+                            </div>
+                        </div>
+                        <div class="score-criteria col-md-6" style="padding:0px">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <ul>
+                                    <li style="border-bottom: 0px">
+                                        <div>
+                                            <h4 style="color:black">Answer</h4>
+                                            <textarea name="answer" required></textarea>
+                                        </div>
+                                    </li>
+                                    <li style="border-bottom: 0px">Upload file
+                                        <input name="file" type="file" required>
+                                    </li>
+                                    <li style="border-bottom: 0px">
+                                        <div class="form-action">
+                                            <input type="submit" value="Submit mark" class="mc-btn btn-style-1">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}
