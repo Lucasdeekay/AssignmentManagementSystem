@@ -1,8 +1,9 @@
 from django.urls import path
 
+from Assignment import views
 from Assignment.views import LoginView, RegisterView, LogoutView, AssignmentView, StudentAssignmentListView, \
     SubmissionView, MarkAssignmentView, SubmitAssignmentView, ProfileView, ForgotPasswordView, ChangePasswordView, \
-    AdminView, add_course
+    AdminView
 
 app_name = 'Assignment'
 
@@ -20,5 +21,5 @@ urlpatterns = [
          name="submit_assignment"),
     path("profile", ProfileView.as_view(), name="profile"),
     path("profile/admin", AdminView.as_view(), name="profile_admin"),
-    path("profile/admin/add_course", add_course, name="add_course"),
+    path("profile/admin/add_course", views.add_course, name="add_course"),
 ]

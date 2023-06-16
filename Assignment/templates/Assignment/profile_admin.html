@@ -59,16 +59,16 @@ Assignment
                 <!-- ADD ASSIGNMENT -->
                 <div class="tab-pane fade" id="staffreg">
                     <div class="table-wrap">
-                        <form method="post" action="" class="avatar-acount">
+                        <form method="post" action="" class="avatar-acount" style="width:fit-content">
                         {% csrf_token %}
+                            <h3>Register New Course</h3>
+                            <p>Fill in the form to register for the new course</p>
                             <div class="">
-                                <h3>Register New Course</h3>
                                 <input class="form-control" type="text" name="course_title" placeholder="Course Title" required><br>
                                 <input class="form-control" type="text" name="course_code" placeholder="Course Code" required><br>
-                                <input class="form-control" type="submit" value="Submit">
                             </div>
                             <div class="input-save">
-                                <input type="submit" value="Save changes" class="mc-btn btn-style-1">
+                                <input type="submit" value="Register" class="mc-btn btn-style-1">
                             </div>
                         </form>
                     </div>
@@ -78,15 +78,15 @@ Assignment
                 <!-- ADD ASSIGNMENT -->
                 <div class="tab-pane fade" id="studentadd">
                     <div class="table-wrap">
-                        <form method="post" action="{% url 'Assignment:add_course' %}" class="avatar-acount">
+                        <form method="post" action="{% url 'Assignment:add_course' %}" class="avatar-acount" style="width:fit-content">
                         {% csrf_token %}
+                            <h3>Add Course</h3>
+                            <p>Enter the course code of the course you want to do</p>
                             <div class="">
-                                <h3>Add Course</h3>
                                 <input class="form-control" type="text" name="course_code" placeholder="Course Code" required><br>
-                                <input class="form-control" type="submit" value="Submit">
                             </div>
-                            <div class="input-save">
-                                <input type="submit" value="Save changes" class="mc-btn btn-style-1">
+                            <div class="">
+                                <input type="submit" value="Add" class="mc-btn btn-style-1">
                             </div>
                         </form>
                     </div>

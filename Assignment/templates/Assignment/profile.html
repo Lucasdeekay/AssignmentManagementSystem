@@ -17,13 +17,13 @@ Profile
                 <div class="avatar-acount">
                     <form method="post" action="" class="info-acount">
                         {% csrf_token %}
-                        <h3 class="md black">{{ person.last_name }} {{ person.firsst_name }}</h3>
+                        <h3 class="md black">{{ person.last_name }} {{ person.first_name }}</h3>
                         <p>{{ person.email }}</p>
                         <p>
-                            {% if user == "staff" %}
+                            {% if current_user == "staff" %}
                             {{ user.staff_id }}
                             {% else %}
-                            {{ user.staff_id }}
+                            {{ user.matric_no }}
                             {% endif %}
                         </p>
                         <div class="security">

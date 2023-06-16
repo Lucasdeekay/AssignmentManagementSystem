@@ -42,7 +42,7 @@ Student Assignment List
                                     <div class="total-subm">{{ sub.student.matric_no }}</div>
                                     <div class="latest-reply">{{ sub.date }}</div>
                                     <div class="tb-icon">
-                                        <a href="{% url 'Assignment:submission' sub.id %}">View Submission</a>
+                                        <a class="btn btn-primary" style="color:white" href="{% url 'Assignment:submission' sub.id %}">View Submission</a>
                                     </div>
                                 </div>
                                 {% endfor %}

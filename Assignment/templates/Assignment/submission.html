@@ -39,7 +39,7 @@ Assignment Submission
                             <p>Assignment must be submitted before {{ assignment.deadline }}</p>
 
                             <div class="download-file-learn">
-                                <a href="{% url 'Assignment:submit_assignment' ass_id %}" class="mc-btn btn-style-1">
+                                <a href="{% url 'Assignment:submit_assignment' assignment.id %}" class="mc-btn btn-style-1">
                                     <i class="icon md-download-1"></i>
                                     Submit Assignment
                                 </a>
@@ -53,12 +53,12 @@ Assignment Submission
                         <aside class="question-sidebar">
                             <div class="download-file-learn">
                                 {% if submission %}
-                                <a href="{{ submission.assignment.file.url }}" class="mc-btn btn-style-1" download>
+                                <a href="/media/{{ submission.assignment.file }}" class="mc-btn btn-style-1" download>
                                     <i class="icon md-download-1"></i>
                                     Assignment File
                                 </a>
                                 {% else %}
-                                <a href="{{ assignment.file.url }}" class="mc-btn btn-style-1" download>
+                                <a href="/media/{{ assignment.file }}" class="mc-btn btn-style-1" download>
                                     <i class="icon md-download-1"></i>
                                     Assignment File
                                 </a>
@@ -74,12 +74,14 @@ Assignment Submission
                                 </span></h4>
                             </div>
 
+                            {% if user == 'staff' %}
                             {% if submission.grading.score <= 0 %}
                             <div class="download-file-learn">
                                 <a href="{% url 'Assignment:mark_assignment' submission.id %}" class="mc-btn btn-style-1">
                                     Mark Assignment
                                 </a>
                             </div>
+                            {% endif %}
                             {% endif %}
                         </aside>
                     </div>

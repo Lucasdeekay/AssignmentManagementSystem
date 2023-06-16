@@ -20,7 +20,7 @@ Mark Assignment
                 <div class="col-md-12">
                     <div class="question-content" style="min-height:0px">
                         <div class="attachments">
-                            <a href="{{ submission.assignment.file.url }}" download><i class="icon md-paperclip"></i>Download Assignment</a>
+                            <a href="/media/{{ submission.assignment.file }}" download><i class="icon md-paperclip"></i>Download Assignment</a>
                         </div>
                         <div class="mc-title">
                             <h3 class="md">{{ submission.assignment.title }}</h3>
@@ -29,24 +29,26 @@ Mark Assignment
                             </div>
                         </div>
                         <div class="score-criteria col-md-6" style="padding:0px">
-                            <form action="" method="post">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <ul>
-                                    <li style="border-bottom: 0px">
+                                <div>
+                                    <h4 style="color:black">Answer</h4>
+                                    <small>Fill in the form to submit your answer</small>
+                                    <div style="margin-bottom: 5px">
                                         <div>
-                                            <h4 style="color:black">Answer</h4>
-                                            <textarea name="answer" required></textarea>
+                                            <textarea class="form-control" name="answer" placeholder="Enter answer" required></textarea>
                                         </div>
-                                    </li>
-                                    <li style="border-bottom: 0px">Upload file
-                                        <input name="file" type="file" required>
-                                    </li>
-                                    <li style="border-bottom: 0px">
+                                    </div>
+                                    <div style="margin-bottom: 5px">
+                                        <small>Upload answer file</small>
+                                        <input class="form-control" name="file" type="file" required>
+                                    </div>
+                                    <div style="margin-bottom: 25px">
                                         <div class="form-action">
-                                            <input type="submit" value="Submit mark" class="mc-btn btn-style-1">
+                                            <input type="submit" value="Submit" class="mc-btn btn-style-1">
                                         </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

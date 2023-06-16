@@ -20,7 +20,7 @@ Mark Assignment
                 <div class="col-md-12">
                     <div class="question-content" style="min-height:0px">
                         <div class="attachments">
-                            <a href="{{ submission.file.url }}" download><i class="icon md-paperclip"></i>Download Solution</a>
+                            <a href="/media/{{ submission.file }}" download><i class="icon md-paperclip"></i>Download Solution</a>
                         </div>
                         <div class="mc-title">
                             <h3 class="md">{{ submission.assignment.title }}</h3>
@@ -31,25 +31,24 @@ Mark Assignment
                         <div class="score-criteria col-md-6" style="padding:0px">
                             <form action="" method="post">
                                 {% csrf_token %}
-                                <ul>
-                                    <li style="border-bottom: 0px">Assignment Score
-                                        <input name="score" type="number" required>
+                                <div>
+                                    <div style="margin-bottom: 5px">Assignment Score
+                                        <input class="form-control" name="score" type="number" required>
 
-                                    </li>
-                                    <li style="border-bottom: 0px">
+                                    </div>
+                                    <div style="margin-bottom: 5px">
                                         <div>
                                             <h4 style="color:black">Feedback</h4>
-                                            <textarea name="feedback" required></textarea>
+                                            <textarea class="form-control" name="feedback" placeholder="Enter feedback" required></textarea>
                                         </div>
-                                    </li>
-                                    <li style="border-bottom: 0px">
+                                    </div>
+                                    <div style="margin-bottom: 25px">
                                         <div class="form-action">
-                                            <input type="submit" value="Submit mark" class="mc-btn btn-style-1">
+                                            <input type="submit" value="Submit" class="mc-btn btn-style-1">
                                         </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
                             </form>
-
                         </div>
                     </div>
                 </div>

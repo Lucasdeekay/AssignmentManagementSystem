@@ -99,8 +99,9 @@ class ForgotPasswordView(View):
             # Collect inputs
             username = request.POST.get("username").strip()
 
-            if Person.objects.filter(username=username).exists():
-                person = Person.objects.get(username=username)
+            if User.objects.filter(username=username).exists():
+                user = User.objects.get(username=username)
+                person = Person.objects.get(user=user)
                 return HttpResponseRedirect(reverse("Assignment:change_password", args=(person.id,)))
             else:
                 messages.error(request, "User does not exist")
@@ -142,17 +143,23 @@ class AssignmentView(View):
         if Staff.objects.filter(person=person).exists():
             lecturer = Staff.objects.get(person=person)
             all_assignments = Assignment.objects.filter(lecturer=lecturer)
+            courses = Course.objects.filter(lecturer=lecturer)
             current_user = "staff"
+            return render(request, self.template_name,
+                          {'assignments': all_assignments, "user": current_user, "person": person, "courses": courses})
 
         else:
             student = Student.objects.get(person=person)
             reg_courses = RegisteredCourses.objects.get(student=student)
             all_assignments = [
-                Assignment.objects.filter(course=course) for course in reg_courses.courses
+                Assignment.objects.filter(course=course).values() for course in reg_courses.courses.all()
+            ]
+            all_assignments = [
+                {"id": ass[0]["id"], "title": ass[0]["title"], "course": Course.objects.get(id=ass[0]["course_id"]).code, "date_given": ass[0]["date_given"], "deadline": ass[0]["deadline"]} for ass in all_assignments
             ]
             current_user = "student"
 
-        return render(request, self.template_name, {'assignments': all_assignments, "user": current_user, "person": person})
+            return render(request, self.template_name, {'assignments': all_assignments, "user": current_user, "person": person})
 
     @method_decorator(login_required)
     def post(self, request):
@@ -165,6 +172,7 @@ class AssignmentView(View):
             pdf_title = request.POST.get("pdf_title").strip().upper()
             deadline = request.POST.get("deadline")
             file = request.FILES.get("file")
+            print(file)
 
             course = Course.objects.get(code=course_code)
             Assignment.objects.create(title=pdf_title, file=file, course=course, lecturer=lecturer,
@@ -175,7 +183,7 @@ class AssignmentView(View):
 
 
 class StudentAssignmentListView(View):
-    template_name = "Assignment/student_Assignment_list.html"
+    template_name = "Assignment/student_assignment_list.html"
 
     @method_decorator(login_required)
     def get(self, request, ass_id):
@@ -186,7 +194,7 @@ class StudentAssignmentListView(View):
 
 
 class SubmissionView(View):
-    template_name = "submission.html"
+    template_name = "Assignment/submission.html"
 
     @method_decorator(login_required)
     def get(self, request, id):
@@ -202,7 +210,7 @@ class SubmissionView(View):
             student = Student.objects.get(person=person)
             current_user = "student"
             assignment = Assignment.objects.get(id=id)
-            if Submission.objects.fliter(**{"assignment":assignment, "student":student}).exists():
+            if Submission.objects.filter(**{"assignment":assignment, "student":student}).exists():
                 submission = Submission.objects.get(assignment=assignment, student=student)
                 return render(request, self.template_name, {"submission": submission, "user": current_user, "person": person})
             else:
@@ -228,10 +236,9 @@ class MarkAssignmentView(View):
             score = request.POST.get("score").strip()
             feedback = request.POST.get("feedback").strip()
 
-            grading = Grading.objects.create(assignment=submission.assignment, student=submission.student, score=score, feedback=feedback)
-
-            submission.grading = grading
-            submission.save()
+            submission.grading.score = score
+            submission.grading.feedback = feedback
+            submission.grading.save()
 
             return HttpResponseRedirect(reverse("Assignment:submission", args=(submission.id,)))
 
@@ -244,7 +251,11 @@ class SubmitAssignmentView(View):
         person = Person.objects.get(user=request.user)
         student = Student.objects.get(person=person)
         assignment = Assignment.objects.get(id=ass_id)
-        submission = Submission.objects.create(assignment=assignment, student=student, date=datetime.now().date())
+        if not Submission.objects.filter(**{"assignment":assignment, "student":student}).exists():
+            grading = Grading.objects.create(assignment=assignment, student=student)
+            submission = Submission.objects.create(assignment=assignment, student=student, grading=grading, date=datetime.now().date())
+        else:
+            submission = Submission.objects.get(assignment=assignment, student=student)
         return render(request, self.template_name, {"submission": submission, "person": person})
 
     @method_decorator(login_required)
@@ -258,13 +269,13 @@ class SubmitAssignmentView(View):
         if request.method == "POST":
             # Collect inputs
             answer = request.POST.get("answer").strip()
-            file = request.FILES.get("file").strip()
+            file = request.FILES.get("file")
 
             submission.text = answer
             submission.file = file
             submission.save()
 
-            return HttpResponseRedirect(reverse("Assignment:submission", args=(submission.id,)))
+            return HttpResponseRedirect(reverse("Assignment:submission", args=(assignment.id,)))
 
 
 class ProfileView(View):
@@ -274,10 +285,12 @@ class ProfileView(View):
     def get(self, request):
         person = Person.objects.get(user=request.user)
         if Staff.objects.filter(person=person).exists():
+            user = Staff.objects.get(person=person)
             current_user = "staff"
         else:
+            user = Student.objects.get(person=person)
             current_user = "student"
-        return render(request, self.template_name, {"user": current_user, "person": person})
+        return render(request, self.template_name, {"user": user, "current_user": current_user, "person": person})
 
     @method_decorator(login_required)
     def post(self, request):
@@ -318,7 +331,7 @@ class AdminView(View):
         else:
             student = Student.objects.get(person=person)
             reg_courses = RegisteredCourses.objects.get(student=student)
-            all_courses = reg_courses.courses
+            all_courses = reg_courses.courses.all()
             current_user = "student"
 
         return render(request, self.template_name,
@@ -346,7 +359,6 @@ class AdminView(View):
             return HttpResponseRedirect(reverse("Assignment:profile_admin"))
 
 
-@method_decorator(login_required)
 def add_course(request):
     person = Person.objects.get(user=request.user)
     student = Student.objects.get(person=person)
