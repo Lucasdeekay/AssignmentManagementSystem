@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from Assignment.functions import upload_student, upload_course, upload_staff
 from Assignment.models import Person, Student, Staff, Course, Assignment, Submission, RegisteredCourses, Grading, \
     RegisteredStudents
 
@@ -55,36 +56,28 @@ class RegisterView(View):
         # Check if form is submitting
         if request.method == "POST":
             # Collect inputs
-            first_name = request.POST.get("first_name").strip().capitalize()
-            last_name = request.POST.get("last_name").strip().capitalize()
-            username = request.POST.get("username").strip()
-            email = request.POST.get("email").strip()
-            password = request.POST.get("password")
-            user_id = request.POST.get("user-id").strip().upper()
-            staff_check = request.POST.get("staff-check")
+            # Get user input
+            file = request.FILES.get('file')
+            file_type = request.POST.get('type')
 
-            # Check if user with username already exists
-            if User.objects.filter(username=username).count() < 1:
-                # Create user and person
-                user = User.objects.create_user(username=username, password=password)
-                person = Person.objects.create(user=user, last_name=last_name, first_name=first_name, email=email)
-                user.save()
-                person.save()
-                if staff_check == "true":
-                    Staff.objects.create(person=person, staff_id=user_id)
-                else:
-                    student = Student.objects.create(person=person, matric_no=user_id)
-                    RegisteredCourses.objects.create(student=student)
-                # Send success message
-                messages.success(request, "Registration successful. Please login")
-                # Redirect to login page
-                return HttpResponseRedirect(reverse("Assignment:login"))
-            else:
-                # Send error message
-                messages.error(request, "Username already exists")
-                # Redirect back to register page
-                return HttpResponseRedirect(reverse("Assignment:register"))
-
+            if file_type == "student":
+                try:
+                    upload_student(file)
+                except Exception:
+                    messages.error(request, "Error uploading file")
+                    return HttpResponseRedirect(reverse("Attendance:register"))
+            elif file_type == "staff":
+                try:
+                    upload_staff(file)
+                except Exception:
+                    messages.error(request, "Error uploading file")
+                    return HttpResponseRedirect(reverse("Attendance:register"))
+            elif file_type == "course":
+                try:
+                    upload_course(file)
+                except Exception:
+                    messages.error(request, "Error uploading file")
+                    return HttpResponseRedirect(reverse("Attendance:register"))
 
 class ForgotPasswordView(View):
     template_name = "Assignment/forgot_password.html"
