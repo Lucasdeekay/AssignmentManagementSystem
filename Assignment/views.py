@@ -375,9 +375,6 @@ def add_course(request):
         return HttpResponseRedirect(reverse("Assignment:profile_admin"))
 
 
-class LogoutView(View):
-
-    @method_decorator(login_required)
-    def get(self, request):
-        logout(request)
-        return HttpResponseRedirect(reverse("Assignment:login"))
+def log_out(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("Assignment:login"))

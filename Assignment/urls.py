@@ -9,7 +9,7 @@ app_name = 'Assignment'
 
 urlpatterns = [
     path("", LoginView.as_view(), name="login"),
-    path("logout", LogoutView.as_view(), name="logout"),
+    path("logout", views.log_out, name="logout"),
     path("register", RegisterView.as_view(), name="register"),
     path("forgot_password", ForgotPasswordView.as_view(), name="forgot_password"),
     path("forgot_password/<int:id>/change_password", ChangePasswordView.as_view(), name="change_password"),
