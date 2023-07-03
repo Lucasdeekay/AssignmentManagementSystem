@@ -79,6 +79,10 @@ class RegisterView(View):
                     messages.error(request, "Error uploading file")
                     return HttpResponseRedirect(reverse("Attendance:register"))
 
+            messages.success(request, "File upload successful")
+            return HttpResponseRedirect(reverse("Attendance:login"))
+
+
 class ForgotPasswordView(View):
     template_name = "Assignment/forgot_password.html"
 
@@ -148,11 +152,14 @@ class AssignmentView(View):
                 Assignment.objects.filter(course=course).values() for course in reg_courses.courses.all()
             ]
             all_assignments = [
-                {"id": ass[0]["id"], "title": ass[0]["title"], "course": Course.objects.get(id=ass[0]["course_id"]).code, "date_given": ass[0]["date_given"], "deadline": ass[0]["deadline"]} for ass in all_assignments
+                {"id": ass[0]["id"], "title": ass[0]["title"],
+                 "course": Course.objects.get(id=ass[0]["course_id"]).code, "date_given": ass[0]["date_given"],
+                 "deadline": ass[0]["deadline"]} for ass in all_assignments
             ]
             current_user = "student"
 
-            return render(request, self.template_name, {'assignments': all_assignments, "user": current_user, "person": person})
+            return render(request, self.template_name,
+                          {'assignments': all_assignments, "user": current_user, "person": person})
 
     @method_decorator(login_required)
     def post(self, request):
@@ -197,17 +204,20 @@ class SubmissionView(View):
             lecturer = Staff.objects.get(person=person)
             current_user = "staff"
             submission = Submission.objects.get(id=id)
-            return render(request, self.template_name, {"submission": submission, "user": current_user, "person": person})
+            return render(request, self.template_name,
+                          {"submission": submission, "user": current_user, "person": person})
 
         else:
             student = Student.objects.get(person=person)
             current_user = "student"
             assignment = Assignment.objects.get(id=id)
-            if Submission.objects.filter(**{"assignment":assignment, "student":student}).exists():
+            if Submission.objects.filter(**{"assignment": assignment, "student": student}).exists():
                 submission = Submission.objects.get(assignment=assignment, student=student)
-                return render(request, self.template_name, {"submission": submission, "user": current_user, "person": person})
+                return render(request, self.template_name,
+                              {"submission": submission, "user": current_user, "person": person})
             else:
-                return render(request, self.template_name, {"assignment": assignment, "user": current_user, "person": person})
+                return render(request, self.template_name,
+                              {"assignment": assignment, "user": current_user, "person": person})
 
 
 class MarkAssignmentView(View):
@@ -244,9 +254,10 @@ class SubmitAssignmentView(View):
         person = Person.objects.get(user=request.user)
         student = Student.objects.get(person=person)
         assignment = Assignment.objects.get(id=ass_id)
-        if not Submission.objects.filter(**{"assignment":assignment, "student":student}).exists():
+        if not Submission.objects.filter(**{"assignment": assignment, "student": student}).exists():
             grading = Grading.objects.create(assignment=assignment, student=student)
-            submission = Submission.objects.create(assignment=assignment, student=student, grading=grading, date=datetime.now().date())
+            submission = Submission.objects.create(assignment=assignment, student=student, grading=grading,
+                                                   date=datetime.now().date())
         else:
             submission = Submission.objects.get(assignment=assignment, student=student)
         return render(request, self.template_name, {"submission": submission, "person": person})
