@@ -56,7 +56,6 @@ class RegisterView(View):
         # Check if form is submitting
         if request.method == "POST":
             # Collect inputs
-            # Get user input
             file = request.FILES.get('file')
             file_type = request.POST.get('type')
 
@@ -65,22 +64,22 @@ class RegisterView(View):
                     upload_student(file)
                 except Exception:
                     messages.error(request, "Error uploading file")
-                    return HttpResponseRedirect(reverse("Attendance:register"))
+                    return HttpResponseRedirect(reverse("Assignment:register"))
             elif file_type == "staff":
                 try:
                     upload_staff(file)
                 except Exception:
                     messages.error(request, "Error uploading file")
-                    return HttpResponseRedirect(reverse("Attendance:register"))
+                    return HttpResponseRedirect(reverse("Assignment:register"))
             elif file_type == "course":
                 try:
                     upload_course(file)
                 except Exception:
                     messages.error(request, "Error uploading file")
-                    return HttpResponseRedirect(reverse("Attendance:register"))
+                    return HttpResponseRedirect(reverse("Assignment:register"))
 
             messages.success(request, "File upload successful")
-            return HttpResponseRedirect(reverse("Attendance:login"))
+            return HttpResponseRedirect(reverse("Assignment:login"))
 
 
 class ForgotPasswordView(View):

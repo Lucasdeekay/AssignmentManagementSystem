@@ -1,7 +1,7 @@
 from django.urls import path
 
 from Assignment import views
-from Assignment.views import LoginView, RegisterView, LogoutView, AssignmentView, StudentAssignmentListView, \
+from Assignment.views import LoginView, RegisterView, AssignmentView, StudentAssignmentListView, \
     SubmissionView, MarkAssignmentView, SubmitAssignmentView, ProfileView, ForgotPasswordView, ChangePasswordView, \
     AdminView
 
