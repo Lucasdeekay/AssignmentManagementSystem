@@ -9,6 +9,7 @@ def upload_staff(file):
     df = pd.read_excel(file)
     data = zip(df.values.tolist())
     for index, i in enumerate(data):
+        print(i)
         data2 = []
         for j in i[0]:
             data2.append(j)
@@ -76,8 +77,7 @@ def upload_course(file):
         if Staff.objects.filter(staff_id=staff_id).exists():
             staff = get_object_or_404(Staff, staff_id=staff_id)
 
-            if str(course_code).strip() != "nan" and not Course.objects.filter(
-                    course_code=course_code.strip().upper()).exists():
+            if not Course.objects.filter(code=course_code).exists():
                 course = Course.objects.create(title=course_title, code=course_code, lecturer=staff)
                 course.save()
 
